@@ -1,0 +1,24 @@
+/* Utility colors */
+:root {
+  --app-bg: #15182b;
+  --app-text: #6f7283;
+
+  --titles: #fff;
+
+  --btn-bg: #005dfa;
+
+  --box-bg: #1d293a;
+
+  --box-label-bg: #191e31;
+}
+
+
+:root {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+}
+
+
+#app-content {
+  display: grid;
+}
