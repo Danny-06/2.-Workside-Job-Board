@@ -82,30 +82,31 @@ window.addEventListener('click', event => {
 
 
 function filterJobOfferts() {
-  const isAnyFilterApplied = Object.values(filterState).some(val => Object.values(val).some(e => e))
+  const isAnyFilterApplied = Object.values(filterState).some(filterTypeValues => {
+    return Object.values(filterTypeValues).some(filterNameValue => filterNameValue)
+  })
 
-  if (!isAnyFilterApplied) {
-    populateJobCardsUI(jobCards, jobCardTemplate, jobData.jobs)
-  }
-  else {
-    const displayedJobs = [...jobData.jobs].filter(job => {
-      let matchFilter = false
+  let displayedJobs = jobData.jobs
 
-      if (filterState.Location[job.location.value]) matchFilter = true
+  if (isAnyFilterApplied) {
+    displayedJobs = displayedJobs.filter(job => {
+      let matchAnyFilter = false
+
+      if (filterState.Location[job.location.value]) matchAnyFilter = true
 
       if (job.isPaymentVerified) {
-        if (filterState.Payment.Verified) matchFilter = true
+        if (filterState.Payment.Verified) matchAnyFilter = true
       } else {
-        if (filterState.Payment.Unverified) matchFilter = true
+        if (filterState.Payment.Unverified) matchAnyFilter = true
       }
 
-      if (filterState.Level[job.info.details.experience]) matchFilter = true
+      if (filterState.Level[job.info.details.experience]) matchAnyFilter = true
 
-      return matchFilter
+      return matchAnyFilter
     })
-
-    populateJobCardsUI(jobCards, jobCardTemplate, displayedJobs)
   }
+
+  populateJobCardsUI(jobCards, jobCardTemplate, displayedJobs)
 }
 
 /**
