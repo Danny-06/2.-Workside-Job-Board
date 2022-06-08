@@ -40,6 +40,9 @@ const {
 } = getAllElementsMapWithDataJSAttribute()
 
 
+/**
+ * Handle the state of the filters applied to the jobs
+ */
 const filterState = {}
 
 jobData.filters.forEach(filter => {
@@ -88,21 +91,59 @@ function filterJobOfferts() {
 
   let displayedJobs = jobData.jobs
 
+  // Show if it matches at least one of the filters
+
+  // if (isAnyFilterApplied) {
+  //   displayedJobs = displayedJobs.filter(job => {
+  //     let matchAnyFilter = false
+
+  //     if (filterState.Location[job.location.value]) matchAnyFilter = true
+
+  //     if (job.isPaymentVerified) {
+  //       if (filterState.Payment.Verified) matchAnyFilter = true
+  //     } else {
+  //       if (filterState.Payment.Unverified) matchAnyFilter = true
+  //     }
+
+  //     if (filterState.Level[job.info.details.experience]) matchAnyFilter = true
+
+  //     return matchAnyFilter
+  //   })
+  // }
+
+  // Show if it matches all the filters
+
   if (isAnyFilterApplied) {
     displayedJobs = displayedJobs.filter(job => {
-      let matchAnyFilter = false
+      for (const locationName in filterState.Location) {
+        if (!filterState.Location[locationName]) continue
 
-      if (filterState.Location[job.location.value]) matchAnyFilter = true
-
-      if (job.isPaymentVerified) {
-        if (filterState.Payment.Verified) matchAnyFilter = true
-      } else {
-        if (filterState.Payment.Unverified) matchAnyFilter = true
+        if (job.location.value !== locationName) return false
       }
 
-      if (filterState.Level[job.info.details.experience]) matchAnyFilter = true
+      for (const paymentName in filterState.Payment) {
+        if (!filterState.Payment[paymentName]) continue
 
-      return matchAnyFilter
+        switch (paymentName) {
+          case 'Verified':
+            if (!job.isPaymentVerified) return false
+          break
+
+          case 'Unverified':
+            if (job.isPaymentVerified) return false
+          break
+
+          default:
+        }
+      }
+
+      for (const levelName in filterState.Level) {
+        if (!filterState.Level[levelName]) continue
+
+        if (job.info.details.experience !== levelName) return false
+      }
+
+      return true
     })
   }
 
