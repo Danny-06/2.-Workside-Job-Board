@@ -1,6 +1,11 @@
-import jobData from './assets/job-data.json' assert {type: 'json'}
+// import jobData from './assets/job-data.json' assert {type: 'json'}
 import { getAllElementsMapWithDataJSAttribute } from './utils-module.js'
 
+const jobData = await fetch('./assets/job-data.json').then(r => r.json()).catch(() => null)
+
+if (!jobData) {
+  throw new TypeError(`Failed to fetch the resource '.assets/job-data.json'`)
+}
 
 const {
   filterAside,
@@ -8,8 +13,11 @@ const {
 
   jobCards,
   jobCardTemplate,
-  jobInfo
+
+  jobInfo,
+  jobInfoTemplate
 } = getAllElementsMapWithDataJSAttribute()
+
 
 
 populateAsideFilterUI(filterAside, filterAsideTemplate, jobData.filters)
@@ -24,15 +32,31 @@ populateJobCardsUI(jobCards, jobCardTemplate, jobData.jobs)
 window.addEventListener('click', event => {
   if (!event.target.parentElement.matches('.label-checkbox')) return
 
+  let checkbox
+
   if (event.target.matches('.check-box'))
-    event.target.classList.toggle('-checked')
-  else
-    if (event.target.matches('.label'))
-      event.target.previousElementSibling.classList.toggle('-checked')
+    checkbox = event.target
+  else if (event.target.matches('.label'))
+    checkbox = event.target.previousElementSibling
+
+  if (!checkbox) return
+
+  event.target.ariaChecked = event.target.classList.toggle('-checked')
+
+  filterJobOfferts()
 })
 
 
 
+
+function filterJobOfferts() {
+  const displayedJobs = [...jobData.jobs].filter(job => {
+
+    return true
+  })
+
+  populateJobCardsUI(jobCards, jobCardTemplate, displayedJobs)
+}
 
 /**
  * 
@@ -61,10 +85,11 @@ function populateAsideFilterUI(container, template, filters) {
     })()
 
     filter.list.forEach(item => {
-      const filterItem = filterContainer.appendChild(labelCheckbox.cloneNode(true))
-
-      filterItem.dataset.filter = item
-      filterItem.querySelector('.label').innerHTML = item
+      const labelCheckboxItem = filterContainer.appendChild(labelCheckbox.cloneNode(true))
+      
+      labelCheckboxItem.dataset.filter = item
+      labelCheckboxItem.querySelector('.check-box').ariaChecked = false
+      labelCheckboxItem.querySelector('.label').innerHTML = item
     })
 
     container.append(content)
@@ -79,6 +104,8 @@ function populateAsideFilterUI(container, template, filters) {
  * @param {{name: string, icon: string, location: {value: string, ui_value: string}, tags: string[], isPaymentVerified: boolean, info: {name: string, time: number, details: {experience: string, location: string, salary_range: string}, company_overview: string, requirements: string[]}}[]} jobs 
  */
 function populateJobCardsUI(container, template, jobs) {
+  container.innerHTML = ''
+
   jobs.forEach((job, index) => {
     /**
      * @type {DocumentFragment}

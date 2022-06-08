@@ -17,6 +17,19 @@
           if (event.button === 0) window.getSelection().empty()
         })
         </script>
+        <template data-js-filter-aside-template>
+            <div class="filter">
+                <div class="title"></div>
+                <div class="label-checkbox">
+                    <div class="check-box">
+                        <svg width="12" height="10">
+                            <polyline fill="none" stroke="currentColor" stroke-width="2" points="1.5 6 4.5 9 10.5 1" />
+                        </svg>                          
+                    </div>
+                    <div class="label"></div>
+                </div>
+            </div>
+        </template>
         <template data-js-job-card-template>
             <div class="job-card">
                 <div class="top">
@@ -40,18 +53,36 @@
                 </div>
             </div>
         </template>
-        <template data-js-filter-aside-template>
-            <div class="filter">
-                <div class="title"></div>
-                <div class="label-checkbox">
-                    <div class="check-box">
-                        <svg width="12" height="10">
-                            <polyline fill="none" stroke="currentColor" stroke-width="2" points="1.5 6 4.5 9 10.5 1" />
-                        </svg>                          
-                    </div>
-                    <div class="label"></div>
+        <template data-js-job-info-template>
+            <div class="header">
+                <div class="title">
+                    <div class="name"></div>
+                    <div class="location"></div>
+                </div>
+                <div class="time"></div>
+            </div>
+            <div class="details">
+                <div class="experience">
+                    <div class="title">Experience</div>
+                    <div class="value"></div>
+                </div>
+                <div class="location">
+                    <div class="title">Location</div>
+                    <div class="value"></div>
+                </div>
+                <div class="salaryrange">
+                    <div class="title">Salaray Range</div>
+                    <div class="value"></div>
                 </div>
             </div>
+            <div class="companyoverview">
+                <div class="title">Company Overview</div>
+                <div class="text"></div>
+            </div>
+            <div class="jobrequirements">
+                <div class="title">Job Requirements</div>
+            </div>
+            <button class="apply-job-btn">Apply to job</button>
         </template>
     </head>
     <body>
@@ -75,9 +106,7 @@
                         <div class="messagewrapper">
                             <div class="message">Select a job offert to see its details</div>
                         </div>
-                        <div class="jobwrapper">
-
-                        </div>
+                        <div class="job-wrapper"></div>
                     </div>
                 </main>
             </div>

@@ -319,7 +319,7 @@ img {
 
 /* Webkit */
 
-::-webkit-scrollbar, ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar, ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-corner {
   --width: 10px;
   --height: 5px;
 
@@ -338,4 +338,8 @@ img {
 ::-webkit-scrollbar-thumb {
   border-radius: 1em;
   background-color: var(--thumb-bg);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
