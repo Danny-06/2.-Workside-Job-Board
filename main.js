@@ -1,6 +1,27 @@
 // import jobData from './assets/job-data.json' assert {type: 'json'}
 import { getAllElementsMapWithDataJSAttribute } from './utils-module.js'
 
+/**
+ * @typedef Filter
+ * @property {string} name
+ * @property {string[]} list
+ */
+
+/**
+ * @typedef Job
+ * @property {string} name
+ * @property {string} icon
+ * @property {{value: string, ui_value: string}} location
+ * @property {string[]} tags
+ * @property {boolean} isPaymentVerified
+ * @property {{name: string, time: string, details: {experience: string, location: string, salary_range: string}}} info
+ * @property {string} company_overview
+ * @property {string[]} requirements
+ */
+
+/**
+ * @type {{filters: Filter[], jobs: Job[]}}
+ */
 const jobData = await fetch('./assets/job-data.json').then(r => r.json()).catch(() => null)
 
 if (!jobData) {
@@ -17,6 +38,15 @@ const {
   jobInfo,
   jobInfoTemplate
 } = getAllElementsMapWithDataJSAttribute()
+
+
+const filterState = {}
+
+jobData.filters.forEach(filter => {
+  filterState[filter.name] = {}
+
+  filter.list.forEach(item => filterState[filter.name][item] = false)
+})
 
 
 
@@ -41,28 +71,48 @@ window.addEventListener('click', event => {
 
   if (!checkbox) return
 
-  checkbox.ariaChecked = checkbox.classList.toggle('-checked')
+  const filterType = checkbox.parentElement.parentElement.dataset.filterType
+  const filterName = checkbox.parentElement.dataset.filter
+
+  filterState[filterType][filterName] = checkbox.ariaChecked = checkbox.classList.toggle('-checked')
 
   filterJobOfferts()
 })
 
 
 
-
 function filterJobOfferts() {
-  const displayedJobs = [...jobData.jobs].filter(job => {
+  const isAnyFilterApplied = Object.values(filterState).some(val => Object.values(val).some(e => e))
 
-    return true
-  })
+  if (!isAnyFilterApplied) {
+    populateJobCardsUI(jobCards, jobCardTemplate, jobData.jobs)
+  }
+  else {
+    const displayedJobs = [...jobData.jobs].filter(job => {
+      let matchFilter = false
 
-  populateJobCardsUI(jobCards, jobCardTemplate, displayedJobs)
+      if (filterState.Location[job.location.value]) matchFilter = true
+
+      if (job.isPaymentVerified) {
+        if (filterState.Payment.Verified) matchFilter = true
+      } else {
+        if (filterState.Payment.Unverified) matchFilter = true
+      }
+
+      if (filterState.Level[job.info.details.experience]) matchFilter = true
+
+      return matchFilter
+    })
+
+    populateJobCardsUI(jobCards, jobCardTemplate, displayedJobs)
+  }
 }
 
 /**
  * 
  * @param {HTMLElement} container 
  * @param {HTMLTemplateElement} template 
- * @param {{name: string, list: string[]}[]} filters 
+ * @param {Filter[]} filters
  */
 function populateAsideFilterUI(container, template, filters) {
   filters.forEach(filter => {
@@ -101,7 +151,7 @@ function populateAsideFilterUI(container, template, filters) {
  * 
  * @param {HTMLElement} container 
  * @param {HTMLTemplateElement} template 
- * @param {{name: string, icon: string, location: {value: string, ui_value: string}, tags: string[], isPaymentVerified: boolean, info: {name: string, time: number, details: {experience: string, location: string, salary_range: string}, company_overview: string, requirements: string[]}}[]} jobs 
+ * @param {Job[]} jobs 
  */
 function populateJobCardsUI(container, template, jobs) {
   container.innerHTML = ''
