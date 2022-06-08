@@ -17,13 +17,61 @@
           if (event.button === 0) window.getSelection().empty()
         })
         </script>
+        <template data-js-job-card-template>
+            <div class="job-card">
+                <div class="top">
+                    <img class="logo" alt>
+                    <div class="title">
+                        <div class="name"></div>
+                        <div class="location">
+                            <img class="icon" alt>
+                            <div class="text"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="tags"></div>
+                    <div class="payment">
+                        <div class="icon">
+                            <img alt>
+                        </div>
+                        <div class="text"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template data-js-filter-aside-template>
+            <div class="filter">
+                <div class="title"></div>
+                <div class="label-checkbox">
+                    <div class="check-box">
+                        <svg width="12" height="10">
+                            <polyline fill="none" stroke="currentColor" stroke-width="2" points="1.5 6 4.5 9 10.5 1" />
+                        </svg>                          
+                    </div>
+                    <div class="label"></div>
+                </div>
+            </div>
+        </template>
     </head>
     <body>
         <div id="app">
             <div id="app-content">
-                <nav class="navbar-block"></nav>
-                <main class="main">
-
+                <nav class="navbar-block">
+                    <a class="logo">
+                        <img src="assets/logos/Workside Logo.svg" alt="Workside Logo">
+                    </a>
+                    <div class="list" role="list">
+                        <a class="item" role="listitem">Find a job</a>
+                        <a class="item" role="listitem">Submit a job</a>
+                        <a class="item" role="listitem">Sponsor us</a>
+                    </div>
+                    <div class="profile-btn"></div>
+                </nav>
+                <aside class="aside-block" data-js-filter-aside></aside>
+                <main class="main-block">
+                    <div class="job-cards" data-js-job-cards></div>
+                    <div class="job-info" data-js-job-info></div>
                 </main>
             </div>
         </div>

@@ -10,6 +10,15 @@
   box-sizing: inherit;
 }
 
+/*
+Avoid autocalculation of `min-width` and `min-height` properties
+of flex/grid items based on the intrinsic size of its content
+*/
+* {
+  min-width: 0;
+  min-height: 0;
+}
+
 :where(:not(:defined)) {
   display: block;
 }
@@ -49,7 +58,6 @@ html, body {
 
   overflow: hidden;
 }
-
 
 body, #app {
   background-color: inherit;
@@ -91,8 +99,11 @@ progress, meter {
   display: block;
 }
 
-fieldset {
+fieldset, blockquote, figure {
   margin: 0;
+}
+
+fieldset {
   padding: 0.6rem 0.8rem;
   border: solid 2px #c0c0c0;
 }
@@ -104,14 +115,6 @@ legend {
 
 iframe {
   border: none;
-}
-
-blockquote {
-  margin: 0;
-}
-
-figure {
-  margin: 0;
 }
 
 source {

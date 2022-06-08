@@ -1,17 +1,22 @@
 /* Utility colors */
 :root {
   --app-bg: #15182b;
-  --app-text: #6f7283;
+  --app-text: #8d91a6;
 
-  --titles: #fff;
+  --titles-color: #fff;
 
   --btn-bg: #005dfa;
 
   --box-bg: #1d293a;
 
   --box-label-bg: #191e31;
+
+  --checkbox-bg: #8ac7ff;
 }
 
+img {
+  -webkit-user-drag: none;
+}
 
 :root {
   background-color: var(--app-bg);
@@ -21,4 +26,207 @@
 
 #app-content {
   display: grid;
+  grid-template-rows: 72px 1fr;
+  grid-template-columns: 180px 1fr;
+  grid-template-areas:
+  "nav   nav "
+  "aside main"
+  ;
+  row-gap: 1.5rem;
+  column-gap: 2rem;
+
+  padding-inline: 6rem;
+  padding-bottom: 3rem;
+}
+
+#app-content > .navbar-block {
+  grid-area: nav;
+}
+
+#app-content > .aside-block {
+  grid-area: aside;
+}
+
+#app-content > .main-block {
+  grid-area: main;
+}
+
+
+.navbar-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-block > .list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 1rem;
+}
+
+.navbar-block > .list > * {
+  user-select: none;
+}
+
+.navbar-block > .profile-btn {
+  
+}
+
+
+.aside-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 3rem;
+
+  overflow: auto;
+}
+
+.aside-block > * {
+  flex-shrink: 0;
+}
+
+.aside-block > .filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 0.5rem;
+}
+
+.aside-block > .filter > .title {
+  margin-bottom: 0.5rem;
+
+  color: var(--titles-color);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+
+.label-checkbox {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  column-gap: 0.5rem;
+}
+
+.check-box {
+  width: 1em;
+  height: 1em;
+
+  border-radius: 0.1em;
+  border: solid 2px #555;
+  color: var(--app-bg);
+
+  cursor: pointer;
+
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.check-box.-checked {
+  background-color: var(--checkbox-bg);
+  border-color: var(--checkbox-bg);
+}
+
+.check-box > svg {
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+}
+
+.check-box > svg > polyline {
+  stroke-dasharray: 14.24 14.24;
+  stroke-dashoffset: 14.24;
+
+  transition: stroke-dashoffset 0.2s;
+}
+
+.check-box.-checked > svg > polyline {
+  stroke-dashoffset: 0;
+}
+
+.label-checkbox > .label {
+  cursor: pointer;
+}
+
+
+.main-block {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 2fr 3fr;
+  column-gap: 3rem;
+}
+
+.main-block > .job-cards {
+  grid-row: 1 / span 1;
+  grid-column: 1 / span 1;
+}
+
+.main-block > .job-info {
+  grid-row: 1 / span 1;
+  grid-column: 2 / span 1;
+}
+
+
+.job-cards {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 2rem;
+
+  overflow: auto;
+}
+
+
+.job-card {
+  border-radius: 0.3em;
+  background-color: var(--box-bg);
+}
+
+
+.job-info {
+  border-radius: 0.3em;
+  background-color: var(--box-bg);
+}
+
+
+
+
+
+
+/* Scrollbar */
+
+/* Firefox */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4262c2 #262e44;
+}
+
+
+/* Webkit */
+
+::-webkit-scrollbar, ::-webkit-scrollbar-thumb {
+  --width: 10px;
+  --height: 5px;
+
+  --thumb-bg: #4262c2;
+  --track-bg: #262e44;
+}
+
+::-webkit-scrollbar {
+  width: var(--width);
+  height: var(--height);
+
+  border-radius: 1em;
+  background-color: var(--track-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 1em;
+  background-color: var(--thumb-bg);
 }

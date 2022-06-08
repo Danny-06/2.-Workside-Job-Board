@@ -1,0 +1,60 @@
+{
+
+  "filters": [
+    {
+      "name": "Location",
+      "list": [
+        "Remote",
+        "United States",
+        "India",
+        "Australia",
+        "Poland",
+        "Canada"
+      ]
+    },
+    {
+      "name": "Payment",
+      "list": [
+        "Verified",
+        "Unverified"
+      ]
+    },
+    {
+      "name": "Level",
+      "list": [
+        "Entry",
+        "Intermediate",
+        "Expert"
+      ]
+    }
+  ],
+
+  "jobs": [
+    {
+      "name": "Looking for a freenlance frontend developer",
+      "icon": "assets/logos/First Job Logo.svg",
+      "location": {
+        "value": "United States",
+        "ui_value": "Virginia, United States"
+      },
+      "tags": ["Frontend", "Webdev"],
+      "isPaymentVerified": true,
+      "info": {
+        "name": "Frontend Developer",
+        "time": 0,
+        "details": {
+          "experience": "Expert",
+          "location": "Virginia, United States",
+          "salary_range": "$100-120/h"
+        },
+        "company_overview": "Dividstar was established in 1932 by Matthew Cohens in Virginia, United States. Dividstart has been the leader application for personal finance over the past 10 decades and aim to continue holding that position. As times continue to evolve, we do too.",
+        "requirements": [
+          "4 years of professional working experience.",
+          "Understanding of Next.js, React and Angular.",
+          "Knowledge of REACT tools including React.js, Webpack, Enzyme, Redux and Flux."
+        ]
+      }
+    }
+  ]
+
+}
