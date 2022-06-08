@@ -7,7 +7,9 @@
 
   --btn-bg: #005dfa;
 
-  --box-bg: #1d293a;
+  --box-bg:        hsl(215deg 33% 17%);
+  --box-bg-hover:  hsl(215deg 33% 23%);
+  --box-bg-active: hsl(215deg 33% 7%);
 
   --box-label-bg: #191e31;
 
@@ -175,25 +177,132 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
-  row-gap: 2rem;
+  align-items: stretch;
+  row-gap: 1rem;
+
+  padding-right: 0.5rem;
 
   overflow: auto;
 }
 
+.job-cards > * {
+  flex-shrink: 0;
+}
 
 .job-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  row-gap: 1rem;
+
+  padding: 1rem;
+
   border-radius: 0.3em;
   background-color: var(--box-bg);
+
+  font-size: 0.9rem;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s;
+}
+
+.job-card:hover {
+  background-color: var(--box-bg-hover);
+}
+
+.job-card:active {
+  background-color: var(--box-bg-active);
+  transition: background-color 0.05s;
+}
+
+.job-card > .top {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+}
+
+.job-card > .top > .title {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 0.2rem;
+}
+
+.job-card > .top > .title > .name {
+  color: var(--titles-color);
+}
+
+.job-card > .top > .title > .location {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  column-gap: 0.2rem;
+}
+
+.job-card > .bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 1rem;
+}
+
+.job-card > .bottom > .tags {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  column-gap: 0.5rem;
+}
+
+.job-card > .bottom > .tags > .tag {
+  padding: 0.5rem;
+
+  border-radius: 0.2em;
+  background-color: var(--app-bg);
+
+  color: var(--titles-color);
+}
+
+.job-card > .bottom > .payment {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 0.4rem;
+
+  color: var(--titles-color);
 }
 
 
 .job-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+
+  padding: 2rem;
+
   border-radius: 0.3em;
   background-color: var(--box-bg);
 }
 
+.job-info > * {
+  flex-grow: 1;
+}
 
+.job-info > .messagewrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.job-info > .jobwrapper {
+  display: none;
+}
 
 
 

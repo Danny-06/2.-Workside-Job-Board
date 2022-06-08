@@ -41,11 +41,86 @@
       "isPaymentVerified": true,
       "info": {
         "name": "Frontend Developer",
-        "time": 0,
+        "time": "Posted 4 days ago",
         "details": {
           "experience": "Expert",
           "location": "Virginia, United States",
           "salary_range": "$100-120/h"
+        },
+        "company_overview": "Dividstar was established in 1932 by Matthew Cohens in Virginia, United States. Dividstart has been the leader application for personal finance over the past 10 decades and aim to continue holding that position. As times continue to evolve, we do too.",
+        "requirements": [
+          "4 years of professional working experience.",
+          "Understanding of Next.js, React and Angular.",
+          "Knowledge of REACT tools including React.js, Webpack, Enzyme, Redux and Flux."
+        ]
+      }
+    },
+    {
+      "name": "Product Designer needed",
+      "icon": "assets/logos/Second Job Logo.svg",
+      "location": {
+        "value": "Remote",
+        "ui_value": "Remote"
+      },
+      "tags": ["Design", "Research"],
+      "isPaymentVerified": false,
+      "info": {
+        "name": "Product Designer",
+        "time": "Posted 4 days ago",
+        "details": {
+          "experience": "Expert",
+          "location": "Remote",
+          "salary_range": "$110-140/h"
+        },
+        "company_overview": "Dividstar was established in 1932 by Matthew Cohens in Virginia, United States. Dividstart has been the leader application for personal finance over the past 10 decades and aim to continue holding that position. As times continue to evolve, we do too.",
+        "requirements": [
+          "4 years of professional working experience.",
+          "Understanding of Next.js, React and Angular.",
+          "Knowledge of REACT tools including React.js, Webpack, Enzyme, Redux and Flux."
+        ]
+      }
+    },
+    {
+      "name": "SEO Specialist for an e-commerce shop",
+      "icon": "assets/logos/Third Job Logo.svg",
+      "location": {
+        "value": "United States",
+        "ui_value": "New York, United States"
+      },
+      "tags": ["SEO"],
+      "isPaymentVerified": false,
+      "info": {
+        "name": "SEO Specialist",
+        "time": "Posted 4 days ago",
+        "details": {
+          "experience": "Expert",
+          "location": "United States",
+          "salary_range": "$90-110/h"
+        },
+        "company_overview": "Dividstar was established in 1932 by Matthew Cohens in Virginia, United States. Dividstart has been the leader application for personal finance over the past 10 decades and aim to continue holding that position. As times continue to evolve, we do too.",
+        "requirements": [
+          "4 years of professional working experience.",
+          "Understanding of Next.js, React and Angular.",
+          "Knowledge of REACT tools including React.js, Webpack, Enzyme, Redux and Flux."
+        ]
+      }
+    },
+    {
+      "name": "Migrate our website from Sketch to Figma",
+      "icon": "assets/logos/Fourth Job Logo.svg",
+      "location": {
+        "value": "India",
+        "ui_value": "Mumbai, India"
+      },
+      "tags": ["Designer"],
+      "isPaymentVerified": true,
+      "info": {
+        "name": "Figma Designer",
+        "time": "Posted 4 days ago",
+        "details": {
+          "experience": "Intermediate",
+          "location": "India",
+          "salary_range": "$60-90/h"
         },
         "company_overview": "Dividstar was established in 1932 by Matthew Cohens in Virginia, United States. Dividstart has been the leader application for personal finance over the past 10 decades and aim to continue holding that position. As times continue to evolve, we do too.",
         "requirements": [
