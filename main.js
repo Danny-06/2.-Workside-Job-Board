@@ -41,7 +41,7 @@ window.addEventListener('click', event => {
 
   if (!checkbox) return
 
-  event.target.ariaChecked = event.target.classList.toggle('-checked')
+  checkbox.ariaChecked = checkbox.classList.toggle('-checked')
 
   filterJobOfferts()
 })
