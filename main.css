@@ -44,16 +44,19 @@ img {
 
 #app-content > .navbar-block {
   grid-area: nav;
-  padding: 0.3rem;
 }
 
 #app-content > .aside-block {
   grid-area: aside;
-  padding: 0.3rem;
 }
 
 #app-content > .main-block {
   grid-area: main;
+}
+
+#app-content > .navbar-block,
+#app-content > .aside-block {
+  padding: 0.4rem;
 }
 
 
@@ -417,7 +420,7 @@ img {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  row-gap: 0.5rem;
+  row-gap: 0.7rem;
 }
 
 .job-info > .jobwrapper > .jobrequirements > .requirements > .item {
@@ -431,6 +434,7 @@ img {
 
 .job-info > .jobwrapper > .jobrequirements > .requirements > .item > img {
   flex-shrink: 0;
+  margin-top: -3px;
 }
 
 

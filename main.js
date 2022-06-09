@@ -7,6 +7,12 @@ import {
 } from './utils-module.js'
 
 
+// Avoid scrolling when using `Space` on a focusable element
+window.addEventListener('keydown', event => {
+  if (event.code === 'Space') event.preventDefault()
+})
+
+
 const fakeData = await getJobData()
 
 if (!fakeData) {

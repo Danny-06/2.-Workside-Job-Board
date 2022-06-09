@@ -72,11 +72,11 @@
           "location": "Remote",
           "salary_range": "$110-140/h"
         },
-        "company_overview": "\"FakeItAll\" was invented in order to fill this website and remove its emptiness from existence. You won't regret join us and our large team of experts in the field.",
+        "company_overview": "FakeItAll was invented in order to fill this website and remove its emptiness from existence. You won't regret join us and our large team of experts in the field.",
         "requirements": [
-          "Experience doing similar work",
-          "Don't make us lose our time or you won't see the light of the day again",
-          "Leave your girlfriend if you have any but you probably don't"
+          "Experience doing similar work.",
+          "Don't make us lose our time or you won't see the light of the day again.",
+          "Leave your girlfriend if you have any but you probably don't."
         ]
       }
     },
@@ -97,11 +97,11 @@
           "location": "United States",
           "salary_range": "$90-110/h"
         },
-        "company_overview": "We started \"MonkeyKnowsAboutYou\" because we were extremely bored in our houses since by the time videogames didn't exist.",
+        "company_overview": "We started \"MonkeyKnowsAboutYou\" because we were extremely bored in our houses since by the time videogames didn't exist. You can't leave once you join us, if you try you will perish.",
         "requirements": [
-          "4 years of professional working experience.",
-          "Understanding of Next.js, React and Angular.",
-          "Knowledge of REACT tools including React.js, Webpack, Enzyme, Redux and Flux."
+          "Account in TikTok.",
+          "Knowledge of the word \"API\".",
+          "Bad popularity among minorities."
         ]
       }
     },
@@ -122,11 +122,12 @@
           "location": "India",
           "salary_range": "$60-90/h"
         },
-        "company_overview": "Dividstar was established in 1932 by Matthew Cohens in Virginia, United States. Dividstart has been the leader application for personal finance over the past 10 decades and aim to continue holding that position. As times continue to evolve, we do too.",
+        "company_overview": "DividedMoon company was canceled after the inclusive language invided the world, but our esence still remains in websites like this to serve as a filler.",
         "requirements": [
-          "4 years of professional working experience.",
-          "Understanding of Next.js, React and Angular.",
-          "Knowledge of REACT tools including React.js, Webpack, Enzyme, Redux and Flux."
+          "Avoid any contact with friends and family.",
+          "Accept our politics and forget everything you belive.",
+          "You are limited to use one program at once.",
+          "Don't use Java."
         ]
       }
     }
