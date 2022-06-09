@@ -2,7 +2,7 @@
 import {
   getAllElementsMapWithDataJSAttribute,
   getJobData,
-  populateAsideFilterUI, populateJobCardsUI, populateJobInfoUI,
+  populateAsideFilterUI, populateJobCardsUI, displayJobInfoUI,
   filterJobOfferts
 } from './utils-module.js'
 
@@ -42,6 +42,12 @@ populateAsideFilterUI(filterAside, filterAsideTemplate, jobData.filters)
 
 populateJobCardsUI(jobCards, jobCardTemplate, jobData.jobs)
 
+jobCards.querySelectorAll(':scope > *').forEach(item => {
+  item.addEventListener('click', event => {
+    displayJobInfoUI(jobInfo, jobInfoTemplate, jobData.jobs[item.dataset.index])
+  })
+})
+
 
 
 
@@ -67,6 +73,12 @@ window.addEventListener('click', event => {
   const displayedJobs = filterJobOfferts(jobData, filterState)
 
   populateJobCardsUI(jobCards, jobCardTemplate, displayedJobs)
+
+  jobCards.querySelectorAll(':scope > *').forEach(item => {
+    item.addEventListener('click', event => {
+      displayJobInfoUI(jobInfo, jobInfoTemplate, jobData.jobs[item.dataset.index])
+    })
+  })
 })
 
 

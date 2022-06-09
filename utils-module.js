@@ -11,9 +11,7 @@
  * @property {{value: string, ui_value: string}} location
  * @property {string[]} tags
  * @property {boolean} isPaymentVerified
- * @property {{name: string, time: string, details: {experience: string, location: string, salary_range: string}}} info
- * @property {string} company_overview
- * @property {string[]} requirements
+ * @property {{name: string, time: string, details: {experience: string, location: string, salary_range: string}, company_overview: string, requirements: string[]}} info
  */
 
 /**
@@ -178,8 +176,42 @@ export function populateJobCardsUI(container, template, jobs) {
 }
 
 
-export function populateJobInfoUI(container, template, jobs) {
+/**
+ * 
+ * @param {HTMLElement} container 
+ * @param {HTMLTemplateElement} template 
+ * @param {Job} jobData 
+ */
+export function displayJobInfoUI(container, template, jobData) {
+  const content = template.content.cloneNode(true)
 
+  content.querySelector('.header > .title > .name').innerHTML = jobData.info.name
+  content.querySelector('.header > .title > .location').innerHTML = jobData.info.details.location
+  content.querySelector('.header > .time').innerHTML = jobData.info.time
+
+  content.querySelector('.details > .experience    > .value').innerHTML = jobData.info.details.experience
+  content.querySelector('.details > .location      > .value').innerHTML = jobData.info.details.location
+  content.querySelector('.details > .salaryrange   > .value').innerHTML = jobData.info.details.salary_range
+
+  content.querySelector('.companyoverview > .text').innerHTML = jobData.info.company_overview
+
+  const requirementItem = (function() {
+    const item = content.querySelector('.jobrequirements > .requirements > .item')
+    item.remove()
+
+    return item
+  })()
+
+  jobData.info.requirements.forEach(requirementText => {
+    const requirement = requirementItem.cloneNode(true)
+
+    requirement.querySelector('.text').innerHTML = requirementText
+
+    content.querySelector('.jobrequirements > .requirements').append(requirement)
+  })
+
+  container.innerHTML = ''
+  container.append(content)
 }
 
 

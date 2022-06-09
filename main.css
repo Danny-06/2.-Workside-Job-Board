@@ -4,6 +4,7 @@
   --app-text: #8d91a6;
 
   --titles-color: #fff;
+  --text-secondary-color: #ccc;
 
   --btn-bg: #005dfa;
 
@@ -300,9 +301,47 @@ img {
   align-items: center;
 }
 
+
 .job-info > .jobwrapper {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  row-gap: 1rem;
+
+  overflow: auto;
 }
+
+.job-info > .jobwrapper > .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.job-info > .jobwrapper > .header > .title {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 0.3rem;
+}
+
+.job-info > .jobwrapper > .header > .title > .name {
+  color: var(--titles-color);
+  font-weight: bold;
+}
+
+.job-info > .jobwrapper > .header > .title > .location {
+  font-size: 0.9rem;
+}
+
+.job-info > .jobwrapper > .header > .time {
+  color: var(--text-secondary-color);
+}
+
+
+
+
 
 
 
@@ -311,23 +350,24 @@ img {
 
 /* Firefox */
 
-@supports (scrollbar-width: thin) {
+@supports (scrollbar-width: thin) and (not selector(::-webkit-scrollbar)) {
   * {
     scrollbar-width: thin;
-    scrollbar-color: #4262c2 #262e44;
-  } 
+    scrollbar-color: #4262c2 #06121a;
+  }
 }
-
 
 
 /* Webkit */
 
-::-webkit-scrollbar, ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-corner {
+::-webkit-scrollbar,
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-corner {
   --width: 10px;
   --height: 5px;
 
   --thumb-bg: #4262c2;
-  --track-bg: #262e44;
+  --track-bg: #06121a;
 }
 
 ::-webkit-scrollbar {
