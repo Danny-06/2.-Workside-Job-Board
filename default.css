@@ -76,6 +76,17 @@ body, #app {
 }
 
 
+:root, *:not(:root) {
+  outline: solid 0 #2968a0;
+  transition-property: outline-width, outline-offset;
+  transition-duration: 0.1s;
+}
+
+*:focus-visible {
+  outline-width: 0.2em;
+  outline-offset: 0.2em;
+}
+
 [hidden] {
   display: none !important;
 }

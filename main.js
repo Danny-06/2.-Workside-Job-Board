@@ -7,9 +7,9 @@ import {
 } from './utils-module.js'
 
 
-const jobData = await getJobData()
+const fakeData = await getJobData()
 
-if (!jobData) {
+if (!fakeData) {
   throw new TypeError(`Failed to fetch the resource`)
 }
 
@@ -30,7 +30,7 @@ const {
  */
 const filterState = {}
 
-jobData.filters.forEach(filter => {
+fakeData.filters.forEach(filter => {
   filterState[filter.name] = {}
 
   filter.list.forEach(item => filterState[filter.name][item] = false)
@@ -38,47 +38,57 @@ jobData.filters.forEach(filter => {
 
 
 
-populateAsideFilterUI(filterAside, filterAsideTemplate, jobData.filters)
+populateAsideFilterUI(filterAside, filterAsideTemplate, fakeData.filters)
 
-populateJobCardsUI(jobCards, jobCardTemplate, jobData.jobs)
-
-jobCards.querySelectorAll(':scope > *').forEach(item => {
-  item.addEventListener('click', event => {
-    displayJobInfoUI(jobInfo, jobInfoTemplate, jobData.jobs[item.dataset.index])
-  })
-})
-
+populateAndAddListenersToJobCards(fakeData.jobs)
 
 
 
 
 // Handle filter check-box toggle
-window.addEventListener('click', event => {
-  if (!event.target.parentElement.matches('.label-checkbox')) return
+window.addEventListener('click', filterJobsEventHandler)
+window.addEventListener('keyup', filterJobsEventHandler)
 
-  let checkbox
 
-  if (event.target.matches('.check-box'))
-    checkbox = event.target
-  else if (event.target.matches('.label'))
-    checkbox = event.target.previousElementSibling
 
-  if (!checkbox) return
 
-  const filterType = checkbox.parentElement.parentElement.dataset.filterType
-  const filterName = checkbox.parentElement.dataset.filter
+
+
+function filterJobsEventHandler(event) {
+  const labelCheckbox = event.target.closest('.label-checkbox')
+  if (!labelCheckbox) return
+
+  event.preventDefault()
+
+  if (event.type === 'keyup' && event.code !== 'Space') {
+    return
+  }
+
+  const checkbox = labelCheckbox.querySelector('.check-box')
+
+  const filterType = labelCheckbox.parentElement.dataset.filterType
+  const filterName = labelCheckbox.dataset.filter
+
 
   filterState[filterType][filterName] = checkbox.ariaChecked = checkbox.classList.toggle('-checked')
 
-  const displayedJobs = filterJobOfferts(jobData, filterState)
+  const displayedJobs = filterJobOfferts(fakeData.jobs, filterState)
 
-  populateJobCardsUI(jobCards, jobCardTemplate, displayedJobs)
+  populateAndAddListenersToJobCards(displayedJobs)
+}
+
+
+function populateAndAddListenersToJobCards(jobData) {
+  populateJobCardsUI(jobCards, jobCardTemplate, jobData)
 
   jobCards.querySelectorAll(':scope > *').forEach(item => {
     item.addEventListener('click', event => {
-      displayJobInfoUI(jobInfo, jobInfoTemplate, jobData.jobs[item.dataset.index])
+      displayJobInfoUI(jobInfo, jobInfoTemplate, jobData[item.dataset.index])
+    })
+    item.addEventListener('keyup', event => {
+      if (event.code !== 'Space') return
+
+      displayJobInfoUI(jobInfo, jobInfoTemplate, jobData[item.dataset.index])
     })
   })
-})
-
-
+}

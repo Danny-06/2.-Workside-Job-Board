@@ -20,7 +20,7 @@
         <template data-js-filter-aside-template>
             <div class="filter">
                 <div class="title"></div>
-                <div class="label-checkbox">
+                <div class="label-checkbox" tabindex="0">
                     <div class="check-box">
                         <svg viewBox="0 0 12 10">
                             <polyline fill="none" stroke="currentColor" stroke-width="2" points="1.5 6 4.5 9 10.5 1" />
@@ -31,7 +31,7 @@
             </div>
         </template>
         <template data-js-job-card-template>
-            <div class="job-card">
+            <div class="job-card" tabindex="0">
                 <div class="top">
                     <img class="logo" alt>
                     <div class="title">
@@ -97,13 +97,13 @@
         <div id="app">
             <div id="app-content">
                 <nav class="navbar-block">
-                    <a class="logo">
+                    <a class="logo" href="#">
                         <img src="assets/logos/Workside Logo.svg" alt="Workside Logo">
                     </a>
                     <div class="list" role="list">
-                        <a class="item" role="listitem">Find a job</a>
-                        <a class="item" role="listitem">Submit a job</a>
-                        <a class="item" role="listitem">Sponsor us</a>
+                        <a class="item" href="#" role="listitem">Find a job</a>
+                        <a class="item" href="#" role="listitem">Submit a job</a>
+                        <a class="item" href="#" role="listitem">Sponsor us</a>
                     </div>
                     <div class="profile-btn"></div>
                 </nav>

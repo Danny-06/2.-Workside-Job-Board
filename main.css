@@ -44,10 +44,12 @@ img {
 
 #app-content > .navbar-block {
   grid-area: nav;
+  padding: 0.3rem;
 }
 
 #app-content > .aside-block {
   grid-area: aside;
+  padding: 0.3rem;
 }
 
 #app-content > .main-block {
@@ -113,6 +115,8 @@ img {
   justify-content: flex-start;
   align-items: flex-start;
   column-gap: 0.5rem;
+
+  cursor: pointer;
 }
 
 .check-box {
@@ -181,7 +185,7 @@ img {
   align-items: stretch;
   row-gap: 1rem;
 
-  padding-right: 0.5rem;
+  padding: 0.3rem;
 
   overflow: auto;
 }
@@ -209,7 +213,7 @@ img {
   transition: background-color 0.2s;
 }
 
-.job-card:hover {
+.job-card:hover, .job-card:focus-visible {
   background-color: var(--box-bg-hover);
 }
 
@@ -299,6 +303,8 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  text-align: center;
 }
 
 
@@ -307,15 +313,23 @@ img {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  row-gap: 1rem;
+  row-gap: 1.5rem;
+
+  padding-inline: 0.5rem;
 
   overflow: auto;
+}
+
+.job-info > .jobwrapper > * {
+  flex-shrink: 0;
 }
 
 .job-info > .jobwrapper > .header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
+  user-select: text;
 }
 
 .job-info > .jobwrapper > .header > .title {
@@ -339,7 +353,103 @@ img {
   color: var(--text-secondary-color);
 }
 
+.job-info > .jobwrapper > .details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+  padding: 1rem;
+
+  border-radius: 0.2em;
+  background-color: var(--app-bg);
+
+  font-size: 0.9rem;
+  user-select: text;
+}
+
+.job-info > .jobwrapper > .details > * {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 0.3rem;
+}
+
+.job-info > .jobwrapper > .details > * > .title {
+  color: var(--titles-color);
+}
+
+.job-info > .jobwrapper > .companyoverview {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 1rem;
+
+  user-select: text;
+}
+
+.job-info > .jobwrapper > .companyoverview > .title {
+  color: var(--titles-color);
+  font-weight: bold;
+}
+
+.job-info > .jobwrapper > .companyoverview > .text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.job-info > .jobwrapper > .jobrequirements {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+
+  user-select: text;
+}
+
+.job-info > .jobwrapper > .jobrequirements > .title {
+  color: var(--titles-color);
+  font-weight: bold;
+}
+
+.job-info > .jobwrapper > .jobrequirements > .requirements {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 0.5rem;
+}
+
+.job-info > .jobwrapper > .jobrequirements > .requirements > .item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  column-gap: 0.5rem;
+
+  font-size: 0.9rem;
+}
+
+.job-info > .jobwrapper > .jobrequirements > .requirements > .item > img {
+  flex-shrink: 0;
+}
+
+
+.job-info > .jobwrapper > .apply-job-btn {
+  width: max-content;
+  align-self: flex-end;
+
+  font-size: 0.9rem;
+}
+
+.apply-job-btn {
+  padding: 1rem;
+
+  border-radius: 0.2em;
+  background-color: var(--btn-bg);
+  color: var(--titles-color);
+
+  font-weight: bold;
+}
 
 
 

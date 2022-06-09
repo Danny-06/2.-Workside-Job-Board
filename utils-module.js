@@ -27,7 +27,7 @@ export function filterJobOfferts(jobData, filterState) {
     return Object.values(filterTypeValues).some(filterNameValue => filterNameValue)
   })
 
-  let displayedJobs = jobData.jobs
+  let displayedJobs = jobData
 
   // Show if it matches at least one of the filters
 
