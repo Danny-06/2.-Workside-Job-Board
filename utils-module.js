@@ -136,6 +136,8 @@ export function populateAsideFilterUI(container, template, filters) {
 export function populateJobCardsUI(container, template, jobs) {
   container.innerHTML = ''
 
+  if (jobs.length === 0) return
+
   jobs.forEach((job, index) => {
     /**
      * @type {DocumentFragment}
@@ -208,6 +210,10 @@ export function displayJobInfoUI(container, template, jobData) {
     requirement.querySelector('.text').innerHTML = requirementText
 
     content.querySelector('.jobrequirements > .requirements').append(requirement)
+  })
+
+  content.querySelector('.apply-job-btn').addEventListener('click', event => {
+
   })
 
   container.innerHTML = ''

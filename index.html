@@ -92,6 +92,9 @@
                 <button class="apply-job-btn" tabindex="0">Apply to job</button>
             </div>
         </template>
+        <template data-js-no-job-match-filter-message-template>
+            <div class="no-job-match-filter-message">No job offert match filter</div>
+        </template>
     </head>
     <body>
         <div id="app">
@@ -105,10 +108,25 @@
                         <a class="item" href="#" role="listitem">Submit a job</a>
                         <a class="item" href="#" role="listitem">Sponsor us</a>
                     </div>
-                    <div class="profile-btn"></div>
+                    <div class="profile-btn" tabindex="0">
+                        <img class="avatar" src="assets/images/Avatar.svg" alt="Profile image">
+                        <div class="username">Olivia Benjamin</div>
+                        <div class="arrowdown">
+                            <img src="assets/icons/Down Arrow.svg" alt>
+                        </div>
+                    </div>
+                    <div class="hamburguer-menu-btn -mobile">
+                        <img src="assets/images/Hamburger Menu.png" alt="Hamburger Button">
+                    </div>
                 </nav>
                 <aside class="aside-block" data-js-filter-aside></aside>
                 <main class="main-block">
+                    <div class="mobile-filter-container">
+                        <div class="filter-mobile-btn">
+                            <div class="title">Filters</div>
+                            <img class="icon" src="assets/icons/Down Arrow.svg" alt>
+                        </div>
+                    </div>
                     <div class="job-cards" data-js-job-cards></div>
                     <div class="job-info" data-js-job-info>
                         <div class="messagewrapper">

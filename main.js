@@ -27,7 +27,9 @@ const {
   jobCardTemplate,
 
   jobInfo,
-  jobInfoTemplate
+  jobInfoTemplate,
+
+  noJobMatchFilterMessageTemplate
 } = getAllElementsMapWithDataJSAttribute()
 
 
@@ -84,13 +86,23 @@ function filterJobsEventHandler(event) {
 }
 
 
+/**
+ * 
+ * @param {Job[]} jobData  
+ */
 function populateAndAddListenersToJobCards(jobData) {
   populateJobCardsUI(jobCards, jobCardTemplate, jobData)
+
+  if (jobData.length === 0) {
+    jobCards.append(noJobMatchFilterMessageTemplate.content.cloneNode(true))
+    return
+  }
 
   jobCards.querySelectorAll(':scope > *').forEach(item => {
     item.addEventListener('click', event => {
       displayJobInfoUI(jobInfo, jobInfoTemplate, jobData[item.dataset.index])
     })
+
     item.addEventListener('keyup', event => {
       if (event.code !== 'Space') return
 
