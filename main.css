@@ -227,16 +227,10 @@ img {
 
 .main-block {
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: auto 1fr;
   grid-template-columns: 2fr 3fr;
   column-gap: 3rem;
   row-gap: 2rem;
-}
-
-@media (max-width: 75em) {
-  .main-block {
-    grid-template-rows: auto 1fr;
-  }
 }
 
 @media (max-width: 56.25em) {
@@ -278,12 +272,12 @@ img {
 }
 
 .main-block > .job-cards {
-  grid-row: 1 / span 1;
+  grid-row: 1 / -1;
   grid-column: 1 / span 1;
 }
 
 .main-block > .job-info {
-  grid-row: 1 / span 1;
+  grid-row: 1 / -1;
   grid-column: 2 / span 1;
 }
 
