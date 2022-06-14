@@ -7,7 +7,7 @@
  export function fillDeclarativeTemplate(template, obj) {
 
   function getInterpolationTokens(string) {
-    return string.trim().split(/\s/)
+    return string.trim().split(/.{0}(?=\{\{[^{^}]+\}\})|(?<=\{\{[^{^}]+\}\}).{0}/)
     .filter(s => s !== '')
   }
 
@@ -20,7 +20,7 @@
       if (propertyPath.startsWith('@') || propertyPath.startsWith('#')) return text
 
       return getValueFromPropertyPath(obj, propertyPath)
-    }).join(' ')
+    }).join('')
   }
 
   function computeValueFromInterpolationTokensLoop(tokens, item, itemName, indexName, currentIndex) {
@@ -36,7 +36,7 @@
       const propertyPath = itemPropertyPath.replace(`@${itemName}.`, '').replace(`@${itemName}`, '') || null
 
       return getValueFromPropertyPath(item, propertyPath)
-    }).join(' ')
+    }).join('')
   }
 
   function computeElementAttributes(element, obj) {
