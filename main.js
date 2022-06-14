@@ -3,7 +3,8 @@ import {
   getAllElementsMapWithDataJSAttribute,
   getJobData,
   populateAsideFilterUI, populateJobCardsUI, displayJobInfoUI,
-  filterJobOfferts
+  filterJobOfferts,
+  fillDeclarativeTemplate
 } from './utils-module.js'
 
 
@@ -47,6 +48,7 @@ fakeData.filters.forEach(filter => {
 
 
 populateAsideFilterUI(filterAside, filterAsideTemplate, fakeData.filters)
+
 
 populateAndAddListenersToJobCards(fakeData.jobs)
 

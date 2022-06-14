@@ -39,6 +39,8 @@
       },
       "tags": ["Frontend", "Webdev"],
       "isPaymentVerified": true,
+      "payment_text": "Payment Verified",
+      "payment_icon": "assets/icons/Checkmark Verified.svg",
       "info": {
         "name": "Frontend Developer",
         "time": "Posted 4 days ago",
@@ -64,6 +66,8 @@
       },
       "tags": ["Design", "Research"],
       "isPaymentVerified": false,
+      "payment_text": "Payment Unverified",
+      "payment_icon": "assets/icons/Checkmark Not Verified.svg",
       "info": {
         "name": "Product Designer",
         "time": "Posted 4 days ago",
@@ -89,6 +93,8 @@
       },
       "tags": ["SEO"],
       "isPaymentVerified": false,
+      "payment_text": "Payment Unverified",
+      "payment_icon": "assets/icons/Checkmark Not Verified.svg",
       "info": {
         "name": "SEO Specialist",
         "time": "Posted 4 days ago",
@@ -114,6 +120,8 @@
       },
       "tags": ["Designer"],
       "isPaymentVerified": true,
+      "payment_text": "Payment Verified",
+      "payment_icon": "assets/icons/Checkmark Verified.svg",
       "info": {
         "name": "Figma Designer",
         "time": "Posted 4 days ago",

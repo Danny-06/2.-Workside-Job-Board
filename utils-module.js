@@ -1,4 +1,227 @@
 /**
+ * 
+ * @param {HTMLTemplateElement} template 
+ * @param {{}} obj 
+ * @returns {DocumentFragment}
+ */
+ export function fillDeclarativeTemplate(template, obj) {
+
+  function getInterpolationTokens(string) {
+    return string.trim().split(/\s/)
+    .filter(s => s !== '')
+  }
+
+  function computeValueFromInterpolationTokens(tokens, obj) {
+    return tokens.map(text => {
+      if (!text.startsWith('{{') || !text.endsWith('}}')) return text
+
+      const propertyPath = text.replace('{{', '').replace('}}', '')
+
+      if (propertyPath.startsWith('@') || propertyPath.startsWith('#')) return text
+
+      return getValueFromPropertyPath(obj, propertyPath)
+    }).join(' ')
+  }
+
+  function computeValueFromInterpolationTokensLoop(tokens, item, itemName, indexName, currentIndex) {
+    return tokens.map(text => {
+      if (!text.startsWith('{{') || !text.endsWith('}}')) return text
+
+      const itemPropertyPath = text.replace('{{', '').replace('}}', '')
+
+      if (itemPropertyPath.startsWith(`#${indexName}`)) return currentIndex
+
+      if (!itemPropertyPath.startsWith(`@${itemName}.`) && itemPropertyPath !== `@${itemName}`) return text
+
+      const propertyPath = itemPropertyPath.replace(`@${itemName}.`, '').replace(`@${itemName}`, '') || null
+
+      return getValueFromPropertyPath(item, propertyPath)
+    }).join(' ')
+  }
+
+  function computeElementAttributes(element, obj) {
+    const attributes = [...element.attributes].filter(attr => attr.nodeName !== '_for_')
+
+    for (let k = 0; k < attributes.length; k++) {
+      const attribute = attributes[k]
+
+      const tokens = getInterpolationTokens(attribute.value)
+
+      attribute.value = computeValueFromInterpolationTokens(tokens, obj)
+    }
+  }
+
+  function computeElementAttributesLoop(element, item, itemName, indexName, currentIndex) {
+    const attributes = [...element.attributes].filter(attr => attr.nodeName !== '_for_')
+
+    for (let k = 0; k < attributes.length; k++) {
+      const attribute = attributes[k]
+
+      const tokens = getInterpolationTokens(attribute.value)
+
+      attribute.value = computeValueFromInterpolationTokensLoop(tokens, item, itemName, indexName, currentIndex)
+    }
+  }
+
+  function computeElementTextNodes(element, obj) {
+    const childNodes = element.childNodes
+
+    for (let j = 0; j < childNodes.length; j++) {
+      const node = childNodes[j]
+
+      if (!(node instanceof Text)) continue
+
+      const tokens = getInterpolationTokens(node.nodeValue)
+
+      node.nodeValue = computeValueFromInterpolationTokens(tokens, obj)
+    }
+  }
+
+  function computeElementTextNodesLoop(element, item, itemName, indexName, currentIndex) {
+    const childNodes = element.childNodes
+
+    for (let k = 0; k < childNodes.length; k++) {
+      const node = childNodes[k]
+
+      if (!(node instanceof Text)) continue
+
+      const tokens = getInterpolationTokens(node.nodeValue)
+
+      node.nodeValue = computeValueFromInterpolationTokensLoop(tokens, item, itemName, indexName, currentIndex)
+    }
+  }
+
+  function getValueFromPropertyPath(obj, propertyPath) {
+    if (propertyPath == null) return obj
+
+    propertyPath = propertyPath.split('.')
+
+    let valueHolder = obj
+
+    for (let k = 0; k < propertyPath.length; k++) {
+      valueHolder = valueHolder[propertyPath[k]]
+    }
+
+    return valueHolder
+  }
+
+  function fillDeclarativeElementTree(element, obj) {
+    computeElementAttributes(element, obj)
+    computeElementTextNodes(element, obj)
+  }
+
+  function fillDeclarativeElementTreeLoop(loopElement, obj) {
+    const loopTokens = loopElement.getAttribute('_for_').split(/; ?/)
+
+    const propertyPathAndItemName = loopTokens[0].split(' ')
+
+    const itemName = propertyPathAndItemName[0]
+    const collectionPropertyPath = propertyPathAndItemName[2]
+
+    const indexName = loopTokens[1]
+
+    if (collectionPropertyPath.includes('@')) return
+
+    loopElement.removeAttribute('_for_')
+
+
+    const collection = getValueFromPropertyPath(obj, collectionPropertyPath)
+
+    // Save reference for the last element to keep appending elements one after another
+    let currentElement = loopElement
+
+    const fistElement = loopElement
+
+    // Read collection
+
+    for (let i = 0; i < collection.length; i++) {
+      const item = collection[i]
+
+      const elementCopy = loopElement.cloneNode(true)
+
+      // Read element itself
+
+      computeElementAttributesLoop(elementCopy, item, itemName, indexName, i)
+      computeElementTextNodesLoop(elementCopy, item, itemName, indexName, i)
+
+
+      const innerLoops = elementCopy.querySelectorAll('[_for_]')
+
+      for (let j = 0; j < innerLoops.length; j++) {
+        const innerLoop = innerLoops[j]
+
+        const loopTokens = innerLoop.getAttribute('_for_').split(/; ?/)
+
+        const itemNameAndPropertyPath = loopTokens[0].split(' ')
+
+        const innerItemName = itemNameAndPropertyPath[0]
+        const innerCollectionPropertyPath = itemNameAndPropertyPath[2]
+
+        const innerIndexName = loopTokens[1]
+
+        // const attrValue = innerLoop.getAttribute('_for_')
+
+        // const tokens = attrValue.split(' ')
+
+        // const innerCollectionPropertyPath = tokens[2]
+
+        if (innerCollectionPropertyPath !== `@${itemName}` && !innerCollectionPropertyPath.startsWith(`@${itemName}.`)) continue
+
+        const computedInnerCollectionPropertyPath = innerCollectionPropertyPath.replace(`@${itemName}`, `${collectionPropertyPath}.${i}`)
+        const value = `${innerItemName} of ${computedInnerCollectionPropertyPath}${innerIndexName ? `; ${innerIndexName}`: ''}`
+
+        innerLoop.setAttribute('_for_', value)
+      }
+
+
+      // Read element childs
+
+      const childs = elementCopy.querySelectorAll('*')
+
+      for (let j = 0; j < childs.length; j++) {
+        const child = childs[j]
+
+        computeElementAttributesLoop(child, item, itemName, indexName, i)
+        computeElementTextNodesLoop(child, item, itemName, indexName, i)
+      }
+
+      currentElement.after(elementCopy)
+
+      currentElement = elementCopy
+    }
+
+    fistElement.remove()
+  }
+
+  if (template instanceof HTMLTemplateElement) {
+    const content = template.content.cloneNode(true)
+
+    // Read elements
+
+    const childs = content.querySelectorAll('*')
+
+    for (let i = 0; i < childs.length; i++) {
+      fillDeclarativeElementTree(childs[i], obj)
+    }
+
+    // Read loop elements
+
+    let loopChilds
+
+    while (loopChilds = content.querySelectorAll('[_for_]'), loopChilds.length) {
+      for (let i = 0; i < loopChilds.length; i++) {
+        fillDeclarativeElementTreeLoop(loopChilds[i], obj)
+      }
+    }
+
+    return content
+  }
+
+}
+
+
+
+/**
  * @typedef Filter
  * @property {string} name
  * @property {string[]} list
@@ -94,36 +317,9 @@ export function filterJobOfferts(jobData, filterState) {
  * @param {HTMLTemplateElement} template 
  * @param {Filter[]} filters
  */
-export function populateAsideFilterUI(container, template, filters) {
-  filters.forEach(filter => {
-    /**
-     * @type {DocumentFragment}
-     */
-    const content = template.content.cloneNode(true)
-
-    const filterContainer = content.querySelector('.filter')
-
-    filterContainer.dataset.filterType = filter.name
-
-    filterContainer.querySelector('.title').innerHTML = filter.name
-
-    const labelCheckbox = (function() {
-      const item = filterContainer.querySelector('.label-checkbox')
-      item.remove()
-
-      return item
-    })()
-
-    filter.list.forEach(item => {
-      const labelCheckboxItem = filterContainer.appendChild(labelCheckbox.cloneNode(true))
-      
-      labelCheckboxItem.dataset.filter = item
-      labelCheckboxItem.querySelector('.check-box').ariaChecked = false
-      labelCheckboxItem.querySelector('.label').innerHTML = item
-    })
-
-    container.append(content)
-  })
+export function populateAsideFilterUI(filterAside, filterAsideTemplate, filters) {
+  const filterAsideContent = fillDeclarativeTemplate(filterAsideTemplate, {filters})
+  filterAside.append(filterAsideContent)
 }
 
 
@@ -133,49 +329,14 @@ export function populateAsideFilterUI(container, template, filters) {
  * @param {HTMLTemplateElement} template 
  * @param {Job[]} jobs 
  */
-export function populateJobCardsUI(container, template, jobs) {
-  container.innerHTML = ''
+ export function populateJobCardsUI(jobCardsContainer, jobCardtemplate, jobs) {
+  jobCardsContainer.innerHTML = ''
 
-  if (jobs.length === 0) return
-
-  jobs.forEach((job, index) => {
-    /**
-     * @type {DocumentFragment}
-     */
-    const content = template.content.cloneNode(true)
-
-    const jobCard = content.querySelector('.job-card')
-    jobCard.dataset.index = index
-
-    jobCard.querySelector('.top > .logo').src = job.icon
-    jobCard.querySelector('.top > .title > .name').innerHTML = job.name
-    jobCard.querySelector('.top > .title > .location > .text').innerHTML = job.location.ui_value
-
-    const tag = (function() {
-      const tag = jobCard.querySelector('.bottom > .tags > .tag')
-      tag.remove()
-
-      return tag
-    })()
-
-    job.tags.forEach(tagName => {
-      const tagClone = tag.cloneNode(true)
-      tagClone.innerHTML = tagName
-
-      jobCard.querySelector('.bottom > .tags').append(tagClone)
-    })
-
-    if (job.isPaymentVerified) {
-      jobCard.querySelector('.bottom > .payment > .icon').src = 'assets/icons/Checkmark Verified.svg'
-      jobCard.querySelector('.bottom > .payment > .text').innerHTML = 'Payment Verified'
-    } else {
-      jobCard.querySelector('.bottom > .payment > .icon').src = 'assets/icons/Checkmark Not Verified.svg'
-      jobCard.querySelector('.bottom > .payment > .text').innerHTML = 'Payment Unverified'
-    }
-
-    container.append(content)
-  })
+  const jobCardsContent = fillDeclarativeTemplate(jobCardtemplate, {jobs})
+  jobCardsContainer.append(jobCardsContent)
 }
+
+
 
 
 /**
@@ -184,44 +345,13 @@ export function populateJobCardsUI(container, template, jobs) {
  * @param {HTMLTemplateElement} template 
  * @param {Job} jobData 
  */
-export function displayJobInfoUI(container, template, jobData) {
-  const content = template.content.cloneNode(true)
 
-  content.querySelector('.header > .title > .name').innerHTML = jobData.info.name
-  content.querySelector('.header > .title > .location').innerHTML = jobData.info.details.location
-  content.querySelector('.header > .time').innerHTML = jobData.info.time
+export function displayJobInfoUI(jobInfoContainer, jobInfoTemplate, jobData) {
+  jobInfoContainer.innerHTML = ''
 
-  content.querySelector('.details > .experience    > .value').innerHTML = jobData.info.details.experience
-  content.querySelector('.details > .location      > .value').innerHTML = jobData.info.details.location
-  content.querySelector('.details > .salaryrange   > .value').innerHTML = jobData.info.details.salary_range
-
-  content.querySelector('.companyoverview > .text').innerHTML = jobData.info.company_overview
-
-  const requirementItem = (function() {
-    const item = content.querySelector('.jobrequirements > .requirements > .item')
-    item.remove()
-
-    return item
-  })()
-
-  jobData.info.requirements.forEach(requirementText => {
-    const requirement = requirementItem.cloneNode(true)
-
-    requirement.querySelector('.text').innerHTML = requirementText
-
-    content.querySelector('.jobrequirements > .requirements').append(requirement)
-  })
-
-  content.querySelector('.apply-job-btn').addEventListener('click', event => {
-
-  })
-
-  container.innerHTML = ''
-  container.append(content)
+  const jobInfoContent = fillDeclarativeTemplate(jobInfoTemplate, jobData)
+  jobInfoContainer.append(jobInfoContent)
 }
-
-
-
 
 
 
@@ -232,7 +362,7 @@ export function displayJobInfoUI(container, template, jobData) {
  * @param {Document | Element} node
  * @returns {{[key: string]: HTMLElement}}
  */
- export function getAllElementsMapWithDataJSAttribute(node = document) {
+export function getAllElementsMapWithDataJSAttribute(node = document) {
   const hyphenToLowerCase = string => string.split('-').map((str, index) => index !== 0 ? str[0].toUpperCase() + str.slice(1) : str).join('')
 
   if (node == null) throw new TypeError(`param 1 cannot be null or undefined`)

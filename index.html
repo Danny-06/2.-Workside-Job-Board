@@ -18,37 +18,37 @@
         })
         </script>
         <template data-js-filter-aside-template>
-            <div class="filter">
-                <div class="title"></div>
-                <div class="label-checkbox" tabindex="0">
-                    <div class="check-box">
+            <div class="filter" data-filter-type="{{@filter.name}}" _for_="filter of filters">
+                <div class="title">{{@filter.name}}</div>
+                <div class="label-checkbox" data-filter="{{@label}}" tabindex="0" _for_="label of @filter.list">
+                    <div class="check-box" aria-checked="false">
                         <svg viewBox="0 0 12 10">
                             <polyline fill="none" stroke="currentColor" stroke-width="2" points="1.5 6 4.5 9 10.5 1" />
-                        </svg>                          
+                        </svg>
                     </div>
-                    <div class="label"></div>
+                    <div class="label">{{@label}}</div>
                 </div>
             </div>
         </template>
         <template data-js-job-card-template>
-            <div class="job-card" tabindex="0">
+            <div class="job-card" data-index="{{#index}}" tabindex="0" _for_="job of jobs; index">
                 <div class="top">
-                    <img class="logo" alt>
+                    <img class="logo" src="{{@job.icon}}" alt>
                     <div class="title">
-                        <div class="name"></div>
+                        <div class="name">{{@job.name}}</div>
                         <div class="location">
                             <img class="icon" src="assets/icons/Location.svg" alt>
-                            <div class="text"></div>
+                            <div class="text">{{@job.location.ui_value}}</div>
                         </div>
                     </div>
                 </div>
                 <div class="bottom">
                     <div class="tags">
-                        <div class="tag"></div>
+                        <div class="tag" _for_="tag of @job.tags">{{@tag}}</div>
                     </div>
                     <div class="payment">
-                        <img class="icon" alt>
-                        <div class="text"></div>
+                        <img class="icon" src="{{@job.payment_icon}}" alt>
+                        <div class="text">{{@job.payment_text}}</div>
                     </div>
                 </div>
             </div>
@@ -57,35 +57,35 @@
             <div class="jobwrapper">
                 <div class="header">
                     <div class="title">
-                        <div class="name"></div>
-                        <div class="location"></div>
+                        <div class="name">{{info.name}}</div>
+                        <div class="location">{{info.details.location}}</div>
                     </div>
-                    <div class="time"></div>
+                    <div class="time">{{info.time}}</div>
                 </div>
                 <div class="details">
                     <div class="experience">
                         <div class="title">Experience</div>
-                        <div class="value"></div>
+                        <div class="value">{{info.details.experience}}</div>
                     </div>
                     <div class="location">
                         <div class="title">Location</div>
-                        <div class="value"></div>
+                        <div class="value">{{info.details.location}}</div>
                     </div>
                     <div class="salaryrange">
                         <div class="title">Salaray Range</div>
-                        <div class="value"></div>
+                        <div class="value">{{info.details.salary_range}}</div>
                     </div>
                 </div>
                 <div class="companyoverview">
                     <div class="title">Company Overview</div>
-                    <div class="text"></div>
+                    <div class="text">{{info.company_overview}}</div>
                 </div>
                 <div class="jobrequirements">
                     <div class="title">Job Requirements</div>
                     <div class="requirements">
-                        <div class="item">
+                        <div class="item" _for_="item of info.requirements">
                             <img class="icon" src="assets/icons/Checkmark Verified.svg" alt>
-                            <div class="text"></div>
+                            <div class="text">{{@item}}</div>
                         </div>
                     </div>
                 </div>
