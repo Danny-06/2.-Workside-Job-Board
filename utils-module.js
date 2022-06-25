@@ -4,7 +4,7 @@
  * @param {{}} obj 
  * @returns {DocumentFragment}
  */
- export function fillDeclarativeTemplate(template, obj) {
+export function fillDeclarativeTemplate(template, obj) {
 
   function getInterpolationTokens(string) {
     return string.trim().split(/.{0}(?=\{\{[^{^}]+\}\})|(?<=\{\{[^{^}]+\}\}).{0}/)
