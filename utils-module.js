@@ -6,18 +6,72 @@
  */
 export function fillDeclarativeTemplate(template, obj) {
 
+  // Use always duplicate character for interpolation
+  const interpolationStart = '{{'
+  const interpolationEnd   = '}}'
+
+  const loopAttributeName = '[for]'
+  const loopItemPrefix    = '@'
+  const loopIndexPrefix   = '#'
+
   function getInterpolationTokens(string) {
-    return string.trim().split(/.{0}(?=\{\{[^{^}]+\}\})|(?<=\{\{[^{^}]+\}\}).{0}/)
-    .filter(s => s !== '')
+    // const regex = /.{0}(?={{[^{^}]+}})|(?<={{[^{^}]+}}).{0}/
+
+    const regex = new RegExp(`.{0}(?=${interpolationStart}[^${interpolationStart[0]}^${interpolationEnd[0]}]+${interpolationEnd})|(?<=${interpolationStart}[^${interpolationStart[0]}^${interpolationEnd[0]}]+${interpolationEnd}).{0}`)
+    return string.trim().split(regex).filter(s => s !== '')
+  }
+
+  function getElementsByAttribute(attr, options = {}) {
+    const {startNode = document} = options
+  
+    const nodeList = [...startNode.querySelectorAll('*')]
+    return nodeList.filter(n => n.hasAttribute(attr))
+  }
+
+  function setAttribute(element, attrName, attrValue = '') {
+    const div = document.createElement('div')
+    div.innerHTML = `<div ${attrName}="${attrValue}"></div>`
+  
+    const attribute = div.children[0].attributes[attrName].cloneNode()
+  
+    element.attributes.setNamedItem(attribute)
+  
+    return attribute
+  }
+
+  function getValueFromPropertyPath(obj, propertyPath) {
+    if (propertyPath == null) return obj
+  
+    const propertyPathSplit = propertyPath.split('.')
+  
+    let valueHolder = obj
+  
+    for (let k = 0; k < propertyPathSplit.length; k++) {
+      const property = propertyPathSplit[k]
+  
+      const isPrimitive = value => ['object', 'function'].every(type => typeof value !== type)
+  
+      if (
+        isPrimitive(valueHolder) && !(property in Object.getPrototypeOf(valueHolder)) ||
+        !isPrimitive(valueHolder) && !(property in valueHolder)
+      ) {
+        console.error(`PropertyPathError: property '${property}' does not exists in ${typeof valueHolder}`, typeof valueHolder === 'string' ? `'${valueHolder}'` : valueHolder, `from source ${typeof obj}`, typeof obj === 'string' ? `'${obj}'` : obj, `from the property path '${propertyPath}'`)
+        return 'undefined'
+      }
+  
+      valueHolder = valueHolder[property]
+    }
+  
+    return valueHolder
   }
 
   function computeValueFromInterpolationTokens(tokens, obj) {
     return tokens.map(text => {
-      if (!text.startsWith('{{') || !text.endsWith('}}')) return text
+      if (!text.startsWith(interpolationStart) || !text.endsWith(interpolationEnd)) return text
 
-      const propertyPath = text.replace('{{', '').replace('}}', '')
+      const propertyPath = text.replace(interpolationStart, '').replace(interpolationEnd, '')
 
-      if (propertyPath.startsWith('@') || propertyPath.startsWith('#')) return text
+      if (propertyPath.startsWith(loopItemPrefix) || propertyPath.startsWith(loopIndexPrefix)) return text
 
       return getValueFromPropertyPath(obj, propertyPath)
     }).join('')
@@ -25,22 +79,22 @@ export function fillDeclarativeTemplate(template, obj) {
 
   function computeValueFromInterpolationTokensLoop(tokens, item, itemName, indexName, currentIndex) {
     return tokens.map(text => {
-      if (!text.startsWith('{{') || !text.endsWith('}}')) return text
+      if (!text.startsWith(interpolationStart) || !text.endsWith(interpolationEnd)) return text
 
-      const itemPropertyPath = text.replace('{{', '').replace('}}', '')
+      const itemPropertyPath = text.replace(interpolationStart, '').replace(interpolationEnd, '')
 
-      if (itemPropertyPath.startsWith(`#${indexName}`)) return currentIndex
+      if (itemPropertyPath.startsWith(`${loopIndexPrefix}${indexName}`)) return currentIndex
 
-      if (!itemPropertyPath.startsWith(`@${itemName}.`) && itemPropertyPath !== `@${itemName}`) return text
+      if (!itemPropertyPath.startsWith(`${loopItemPrefix}${itemName}.`) && itemPropertyPath !== `${loopItemPrefix}${itemName}`) return text
 
-      const propertyPath = itemPropertyPath.replace(`@${itemName}.`, '').replace(`@${itemName}`, '') || null
+      const propertyPath = itemPropertyPath.replace(`${loopItemPrefix}${itemName}.`, '').replace(`${loopItemPrefix}${itemName}`, '') || null
 
       return getValueFromPropertyPath(item, propertyPath)
     }).join('')
   }
 
   function computeElementAttributes(element, obj) {
-    const attributes = [...element.attributes].filter(attr => attr.nodeName !== '_for_')
+    const attributes = [...element.attributes].filter(attr => attr.nodeName !== loopAttributeName)
 
     for (let k = 0; k < attributes.length; k++) {
       const attribute = attributes[k]
@@ -52,7 +106,7 @@ export function fillDeclarativeTemplate(template, obj) {
   }
 
   function computeElementAttributesLoop(element, item, itemName, indexName, currentIndex) {
-    const attributes = [...element.attributes].filter(attr => attr.nodeName !== '_for_')
+    const attributes = [...element.attributes].filter(attr => attr.nodeName !== loopAttributeName)
 
     for (let k = 0; k < attributes.length; k++) {
       const attribute = attributes[k]
@@ -91,27 +145,13 @@ export function fillDeclarativeTemplate(template, obj) {
     }
   }
 
-  function getValueFromPropertyPath(obj, propertyPath) {
-    if (propertyPath == null) return obj
-
-    propertyPath = propertyPath.split('.')
-
-    let valueHolder = obj
-
-    for (let k = 0; k < propertyPath.length; k++) {
-      valueHolder = valueHolder[propertyPath[k]]
-    }
-
-    return valueHolder
-  }
-
   function fillDeclarativeElementTree(element, obj) {
     computeElementAttributes(element, obj)
     computeElementTextNodes(element, obj)
   }
 
   function fillDeclarativeElementTreeLoop(loopElement, obj) {
-    const loopTokens = loopElement.getAttribute('_for_').split(/; ?/)
+    const loopTokens = loopElement.getAttribute(loopAttributeName).split(/; ?/)
 
     const propertyPathAndItemName = loopTokens[0].split(' ')
 
@@ -120,9 +160,9 @@ export function fillDeclarativeTemplate(template, obj) {
 
     const indexName = loopTokens[1]
 
-    if (collectionPropertyPath.includes('@')) return
+    if (collectionPropertyPath.includes(loopItemPrefix)) return
 
-    loopElement.removeAttribute('_for_')
+    loopElement.removeAttribute(loopAttributeName)
 
 
     const collection = getValueFromPropertyPath(obj, collectionPropertyPath)
@@ -145,12 +185,12 @@ export function fillDeclarativeTemplate(template, obj) {
       computeElementTextNodesLoop(elementCopy, item, itemName, indexName, i)
 
 
-      const innerLoops = elementCopy.querySelectorAll('[_for_]')
+      const innerLoops = getElementsByAttribute(loopAttributeName, {startNode: elementCopy})
 
       for (let j = 0; j < innerLoops.length; j++) {
         const innerLoop = innerLoops[j]
 
-        const loopTokens = innerLoop.getAttribute('_for_').split(/; ?/)
+        const loopTokens = innerLoop.getAttribute(loopAttributeName).split(/; ?/)
 
         const itemNameAndPropertyPath = loopTokens[0].split(' ')
 
@@ -159,18 +199,18 @@ export function fillDeclarativeTemplate(template, obj) {
 
         const innerIndexName = loopTokens[1]
 
-        // const attrValue = innerLoop.getAttribute('_for_')
+        // const attrValue = innerLoop.getAttribute(loopAttributeName)
 
         // const tokens = attrValue.split(' ')
 
         // const innerCollectionPropertyPath = tokens[2]
 
-        if (innerCollectionPropertyPath !== `@${itemName}` && !innerCollectionPropertyPath.startsWith(`@${itemName}.`)) continue
+        if (innerCollectionPropertyPath !== `${loopItemPrefix}${itemName}` && !innerCollectionPropertyPath.startsWith(`${loopItemPrefix}${itemName}.`)) continue
 
-        const computedInnerCollectionPropertyPath = innerCollectionPropertyPath.replace(`@${itemName}`, `${collectionPropertyPath}.${i}`)
+        const computedInnerCollectionPropertyPath = innerCollectionPropertyPath.replace(`${loopItemPrefix}${itemName}`, `${collectionPropertyPath}.${i}`)
         const value = `${innerItemName} of ${computedInnerCollectionPropertyPath}${innerIndexName ? `; ${innerIndexName}`: ''}`
 
-        innerLoop.setAttribute('_for_', value)
+        setAttribute(innerLoop, loopAttributeName, value)
       }
 
 
@@ -208,7 +248,7 @@ export function fillDeclarativeTemplate(template, obj) {
 
     let loopChilds
 
-    while (loopChilds = content.querySelectorAll('[_for_]'), loopChilds.length) {
+    while (loopChilds = getElementsByAttribute(loopAttributeName, {startNode: content}), loopChilds.length) {
       for (let i = 0; i < loopChilds.length; i++) {
         fillDeclarativeElementTreeLoop(loopChilds[i], obj)
       }

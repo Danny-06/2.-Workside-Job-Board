@@ -18,9 +18,9 @@
         })
         </script>
         <template data-js-filter-aside-template>
-            <div class="filter" data-filter-type="{{@filter.name}}" _for_="filter of filters">
+            <div class="filter" data-filter-type="{{@filter.name}}" [for]="filter of filters">
                 <div class="title">{{@filter.name}}</div>
-                <div class="label-checkbox" data-filter="{{@label}}" tabindex="0" _for_="label of @filter.list">
+                <div class="label-checkbox" data-filter="{{@label}}" tabindex="0" [for]="label of @filter.list">
                     <div class="check-box" aria-checked="false">
                         <svg viewBox="0 0 12 10">
                             <polyline fill="none" stroke="currentColor" stroke-width="2" points="1.5 6 4.5 9 10.5 1" />
@@ -31,7 +31,7 @@
             </div>
         </template>
         <template data-js-job-card-template>
-            <div class="job-card" data-index="{{#index}}" tabindex="0" _for_="job of jobs; index">
+            <div class="job-card" data-index="{{#index}}" tabindex="0" [for]="job of jobs; index">
                 <div class="top">
                     <img class="logo" src="{{@job.icon}}" alt>
                     <div class="title">
@@ -44,7 +44,7 @@
                 </div>
                 <div class="bottom">
                     <div class="tags">
-                        <div class="tag" _for_="tag of @job.tags">{{@tag}}</div>
+                        <div class="tag" [for]="tag of @job.tags">{{@tag}}</div>
                     </div>
                     <div class="payment">
                         <img class="icon" src="{{@job.payment_icon}}" alt>
@@ -83,7 +83,7 @@
                 <div class="jobrequirements">
                     <div class="title">Job Requirements</div>
                     <div class="requirements">
-                        <div class="item" _for_="item of info.requirements">
+                        <div class="item" [for]="item of info.requirements">
                             <img class="icon" src="assets/icons/Checkmark Verified.svg" alt>
                             <div class="text">{{@item}}</div>
                         </div>
